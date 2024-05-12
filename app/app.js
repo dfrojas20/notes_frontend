@@ -2,7 +2,7 @@ const addForm = document.querySelector(".add");
 const list = document.querySelector(".todos");
 const search = document.querySelector(".search input");
 
-var url = `http://localhost:3000/notes`
+var url = `http://LB_IP/notes`
 
 fetch(url, {
   mode: 'cors',
