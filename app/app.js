@@ -61,7 +61,6 @@ addForm.addEventListener("submit", (e) => {
     //addForm.reset();
   }
 
-  location.reload()
 });
 
 // delete todos
@@ -109,7 +108,9 @@ function postJson(title,content){
                 throw new Error('No se pudo completar la solicitud');
             }
             // Devolver la respuesta como JSON
+            location.reload();
             return response.json();
+
         })
         .then(data => {
             // Manejar la respuesta del servidor
