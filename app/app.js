@@ -22,10 +22,12 @@ fetch(url, {
     data.forEach(element => {
         let html = `
     <li class="list-group-item" id=${element._id}>
-        <span>Título: ${element.title}</span><br>
-        <span>${element.content}</span><br>
+        <span>Título:</span>
+        <span contenteditable="true" id=title${element._id}>${element.title}</span><br>
+        <span contenteditable="true" id=content${element._id}>${element.content}</span><br>
         <span>Última actualización: ${element.last_updated_date.substring(0, 10)} ${element.last_updated_date.substring(11, 19)}</span><br>
         <i class="far fa-trash-alt delete"></i>
+        <i class="far fa-edit edit"></i>
     </li>
     `;
      list.innerHTML += html;
@@ -66,8 +68,22 @@ addForm.addEventListener("submit", (e) => {
 // delete todos
 list.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
-    e.target.parentElement.remove();
     console.log(e.target.parentElement.id)
+    try {
+      deleteJson(e.target.parentElement.id,e)
+    } catch (error) {
+      alert(error)
+    }
+  }
+  if (e.target.classList.contains("edit")) {
+    id = e.target.parentElement.id
+    title = document.getElementById(`title${id}`).innerText
+    content = document.getElementById(`content${id}`).innerText
+    try {
+      putJson(id,title,content)
+    } catch (error) {
+      alert(error)
+    }
   }
 });
 
@@ -122,4 +138,77 @@ function postJson(title,content){
             throw new Error('Error en la solicitud POST:', error);
         });
 
-}
+   }
+
+function deleteJson(id,e){
+    const data = {
+        id_note: id,
+    };
+    // Configuración de la solicitud POST
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // Convierte el objeto JSON a una cadena JSON
+    };
+    // Realizar la solicitud POST utilizando fetch
+    fetch(url + `?id_note=${id}`, requestOptions)
+        .then(response => {
+            // Verificar si la respuesta es exitosa (código 200)
+            if (!response.ok) {
+                throw new Error('No se pudo completar la solicitud');
+            }
+            // Devolver la respuesta como JSON
+            //location.reload();
+            e.target.parentElement.remove();
+            return response.json();
+
+        })
+        .then(data => {
+            // Manejar la respuesta del servidor
+            console.log('Respuesta del servidor:', data);
+        })
+        .catch(error => {
+            // Manejar errores
+            alert(`Error en la solicitud DELETE:${error}`);
+        });
+      }
+      
+function putJson(id,title,content){
+        const data = {
+            id_note: id,
+            title: title,
+            content: content,
+        };
+        // Configuración de la solicitud POST
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) // Convierte el objeto JSON a una cadena JSON
+        };
+        // Realizar la solicitud POST utilizando fetch
+        fetch(url, requestOptions)
+            .then(response => {
+                // Verificar si la respuesta es exitosa (código 200)
+                if (!response.ok) {
+                    throw new Error('No se pudo completar la solicitud');
+                }
+                // Devolver la respuesta como JSON
+                //location.reload();
+                alert('nota editada satisfactoriamente')
+                return response.json();
+    
+            })
+            .then(data => {
+                // Manejar la respuesta del servidor
+                console.log('Respuesta del servidor:', data);
+            })
+            .catch(error => {
+                // Manejar errores
+                throw new Error('Error en la solicitud PUT:', error);
+            });
+    
+       }
