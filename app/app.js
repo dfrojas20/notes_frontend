@@ -18,13 +18,13 @@ fetch(url, {
   .then(data => {
     // Aquí tienes acceso a los datos JSON
     data 
-    console.log(data[0].title)
+    console.log(data[0])
     data.forEach(element => {
         let html = `
-    <li class="list-group-item">
+    <li class="list-group-item" id=${element._id}>
         <span>Título: ${element.title}</span><br>
         <span>${element.content}</span><br>
-        <span>Última actualización: ${element.last_updated_date}</span><br>
+        <span>Última actualización: ${element.last_updated_date.substring(0, 10)} ${element.last_updated_date.substring(11, 19)}</span><br>
         <i class="far fa-trash-alt delete"></i>
     </li>
     `;
@@ -67,6 +67,7 @@ addForm.addEventListener("submit", (e) => {
 list.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     e.target.parentElement.remove();
+    console.log(e.target.parentElement.id)
   }
 });
 

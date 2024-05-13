@@ -4,6 +4,6 @@ var app = express();
 
 app.use(express.static('app'))
 
-app.listen(4200, function () {
-  console.log(`Example app listening on port 4200`);
+app.listen(80, function () {
+  console.log(`app listening on port 80...`);
 });

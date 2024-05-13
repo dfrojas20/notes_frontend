@@ -37,3 +37,7 @@ body {
     border-radius: 13px 13px;
     transition: 0.8s;
   }
+
+  .oculto{
+    display: none;
+  }
